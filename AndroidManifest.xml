@@ -28,12 +28,17 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
-            android:name="com.campuschatter.FeedsActivity"
-            android:label="@string/title_activity_feeds" >
+            android:name="com.campuschatter.FeedActivity"
+            android:label="@string/title_activity_feed" >
         </activity>
         <activity
-            android:name="com.example.campuschatter.PostActivity"
+            android:name="com.campuschatter.PostActivity"
             android:label="@string/title_activity_post" >
+        </activity>
+        <activity
+            android:name="com.campuschatter.RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
     </application>
 
