@@ -23,12 +23,13 @@ public class HomeActivity extends Activity {
 		Parse.initialize(this, "lKTMKGxVecR5pULQb24OyAJHF8LO5rCJSR514bE9", "xXHvncTYu9dGKt87KGavwa4787DsiUXMCWBy3vKk"); 
 		setContentView(R.layout.campuschatter_home);
 		
-		ParseAnalytics.trackAppOpened(getIntent());
+		//ParseAnalytics.trackAppOpened(getIntent());
 		
-		ParseObject testObject = new ParseObject("TestObject");
-		testObject.put("foo", "bar");
-		testObject.saveInBackground();
-		
+		/*
+		 * ParseObject testObject = new ParseObject("TestObject");
+		 * testObject.put("foo", "bar");
+		 * testObject.saveInBackground();
+		*/
 		TextView signinLink = (TextView)findViewById(R.id.signin_link);
 		TextView signupLink = (TextView)findViewById(R.id.signup_link);
 		TextView feedLink = (TextView)findViewById(R.id.feed_link);

@@ -82,7 +82,7 @@ public class RegisterActivity extends Activity {
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-		findViewById(R.id.sign_in_btn).setOnClickListener(
+		findViewById(R.id.sign_up_btn).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
