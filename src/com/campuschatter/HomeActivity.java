@@ -25,6 +25,7 @@ public class HomeActivity extends Activity {
 		
 		//ParseAnalytics.trackAppOpened(getIntent());
 		
+		// test if parse succeed		
 		/*
 		 * ParseObject testObject = new ParseObject("TestObject");
 		 * testObject.put("foo", "bar");
