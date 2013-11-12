@@ -1,6 +1,7 @@
 package com.campuschatter;
 
 import android.animation.Animator;
+
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 
 import com.example.campuschatter.R;
 
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.

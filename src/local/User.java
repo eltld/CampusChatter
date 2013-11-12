@@ -1,9 +1,10 @@
 package local;
 
 public interface User {
-	public User SignIn();
-	public User SignUp();
-	public void Logout();
+	public User signIn();
+	public User signUp();
+	public void logout();
+	public void editProfile();
 	
 	public void refresh();
 	
@@ -24,4 +25,7 @@ public interface User {
 	
 	// choose a voice record from phone to upload, return the title of the record
 	public String voiceChoose();
+	
+	// delete the status that has been posted
+	public void deletePost();
 }

@@ -1,10 +1,14 @@
 package com.campuschatter;
 
 import android.app.Activity;
+
 import android.os.Bundle;
 import android.view.Menu;
 
 import com.example.campuschatter.R;
+
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
 
 public class PostActivity extends Activity {
 

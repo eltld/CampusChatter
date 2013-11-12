@@ -10,12 +10,25 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseObject;
+
 public class HomeActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Parse.initialize(this, "lKTMKGxVecR5pULQb24OyAJHF8LO5rCJSR514bE9", "xXHvncTYu9dGKt87KGavwa4787DsiUXMCWBy3vKk"); 
 		setContentView(R.layout.campuschatter_home);
+		
+		ParseAnalytics.trackAppOpened(getIntent());
+		
+		// test if parse succeed
+		ParseObject testObject = new ParseObject("TestObject");
+		testObject.put("foo", "bar");
+		testObject.saveInBackground();
 		
 		TextView signinLink = (TextView)findViewById(R.id.signin_link);
 		TextView signupLink = (TextView)findViewById(R.id.signup_link);

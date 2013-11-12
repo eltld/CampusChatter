@@ -1,11 +1,10 @@
 package remote;
+import local.User;
 
 public interface Administrator {
-	public void showAllUser();
-	
 	public void accessDB(DBSystem db);
 	
-	public void deactiveUser();
-	public void activeUser();
+	public void deactiveUser(User user);
+	public void activeUser(User user);
 
 }
