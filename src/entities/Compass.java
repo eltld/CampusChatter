@@ -1,5 +1,5 @@
 package entities;
 
 public interface Compass {
-	public float getDegree();
+	public float getAzimuth();
 }
