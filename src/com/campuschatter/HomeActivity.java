@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 public class HomeActivity extends Activity {
 
@@ -21,16 +22,9 @@ public class HomeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		Parse.initialize(this, "lKTMKGxVecR5pULQb24OyAJHF8LO5rCJSR514bE9", "xXHvncTYu9dGKt87KGavwa4787DsiUXMCWBy3vKk"); 
+		
 		setContentView(R.layout.campuschatter_home);
 		
-		//ParseAnalytics.trackAppOpened(getIntent());
-		
-		// test if parse succeed		
-		/*
-		 * ParseObject testObject = new ParseObject("TestObject");
-		 * testObject.put("foo", "bar");
-		 * testObject.saveInBackground();
-		*/
 		TextView signinLink = (TextView)findViewById(R.id.signin_link);
 		TextView signupLink = (TextView)findViewById(R.id.signup_link);
 		TextView feedLink = (TextView)findViewById(R.id.feed_link);
@@ -38,21 +32,34 @@ public class HomeActivity extends Activity {
 		signinLink.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				signinLinkEventHandler(view);
+				if (ParseUser.getCurrentUser() == null) {
+					signinLinkEventHandler(view);
+				}
 			}
 		});
 		signupLink.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				signupLinkEventHandler(view);
+				if (ParseUser.getCurrentUser() == null) {
+					signupLinkEventHandler(view);
+				}
 			}
 		});
 		feedLink.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				feedLinkEventHandler(view);
+				if (ParseUser.getCurrentUser() != null) {
+					feedLinkEventHandler(view);
+				}
 			}
 		});
+
+		// Redirect to feeds if already logged in
+		if (ParseUser.getCurrentUser() != null) {
+			Intent intent = new Intent(this, FeedActivity.class);
+			startActivity(intent);
+			return;
+		}
 	}
 
 	@Override
