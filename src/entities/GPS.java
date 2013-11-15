@@ -1,6 +1,6 @@
 package entities;
 
 public interface GPS {
-	public float getLatitude();
-	public float getLongitude();
+	public double getLatitude();
+	public double getLongitude();
 }
