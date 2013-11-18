@@ -88,7 +88,7 @@ public class PostActivity extends Activity {
 		setResult(RESULT_OK, intent);
 		finish();
 	}
-
+	
 	private void storeBytes() {
 		// TODO: Check for inputed text fields (is valid)
 		EditText vTitle = (EditText)findViewById(R.id.story_title);

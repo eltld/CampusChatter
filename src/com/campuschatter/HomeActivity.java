@@ -56,7 +56,7 @@ public class HomeActivity extends Activity {
 
 		// Redirect to feeds if already logged in
 		if (ParseUser.getCurrentUser() != null) {
-			Intent intent = new Intent(this, FeedActivity.class);
+			Intent intent = new Intent(this, HomePage.class);
 			startActivity(intent);
 			return;
 		}
