@@ -9,5 +9,7 @@
     <string name="signin">Sign In</string>
     <string name="signup">Sign Up</string>
     <string name="welcome">Welcome to Campus Chatter!</string>
+    <string name="title_activity_home_page">HomePage</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
