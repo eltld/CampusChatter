@@ -21,12 +21,11 @@
         android:onClick ="postStatus" />
 
         <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:src="@android:drawable/ic_menu_rotate" />
-        
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:src="@android:drawable/ic_menu_rotate" />
        
     </LinearLayout>
         
@@ -51,14 +50,32 @@
             	android:layout_height="100dp"
                 android:src="@drawable/user_icon" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            
+            
+
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/MyName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                
+                android:text="Name"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/MyStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="22dp"
                 android:layout_toRightOf="@+id/imageView1"
                 android:text="Walk into the sky" 
             	android:textSize = "26dp"/>
+            </LinearLayout>
+            
         </TableRow>
 
         <TableRow
@@ -73,6 +90,19 @@
                 android:src="@drawable/user_icon"
                  />
 
+             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            
+            <TextView
+                android:id="@+id/HisName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:text="Name"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
@@ -81,6 +111,7 @@
                 android:layout_toRightOf="@+id/imageView2"
                 android:text="Walk into the sky"
                 android:textSize = "26dp" />
+             </LinearLayout>
         </TableRow>
 
         <TableRow
@@ -94,27 +125,20 @@
                 android:layout_height="100dp"
                 android:src="@drawable/user_icon" />
 
-            <TextView
-                android:id="@+id/textView3"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="22dp"
-                android:layout_toRightOf="@+id/imageView1"
-                android:text="Walk into the sky"
-                android:textSize = "26dp" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+                android:orientation="vertical" >
             
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/user_icon" />
-
+            <TextView
+                android:id="@+id/HerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:layout_below="@+id/textView3"
+                android:text="Name"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
@@ -123,9 +147,10 @@
                 android:layout_toRightOf="@+id/imageView1"
                 android:text="Walk into the sky"
                 android:textSize = "26dp" />
+             </LinearLayout>
         </TableRow>
-    </TableLayout>
 
-    
+        
+    </TableLayout>
 
 </RelativeLayout>

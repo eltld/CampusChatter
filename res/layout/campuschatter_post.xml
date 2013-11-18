@@ -75,6 +75,7 @@
         android:layout_alignRight="@+id/tableLayout1"
         android:layout_below="@+id/tableLayout1"
         android:layout_marginTop="20dp"
+        android:onClick="postSth"
         android:text="@string/post" />
 
     <ImageView
