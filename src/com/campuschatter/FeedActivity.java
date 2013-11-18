@@ -16,6 +16,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
 
 public class FeedActivity extends Activity {
+	private final int POST_STORY_CODE = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,9 @@ public class FeedActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.feed, menu);
 	    return super.onCreateOptionsMenu(menu);
-	}@Override
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
@@ -50,7 +53,7 @@ public class FeedActivity extends Activity {
 
 	public void postLinkEventHandler(View view) {
 		Intent intent = new Intent(this, PostActivity.class);
-		startActivity(intent);		
+		startActivityForResult(intent, POST_STORY_CODE);		
 	}
 	
 	public void logout() {
@@ -58,5 +61,14 @@ public class FeedActivity extends Activity {
 		Intent intent = new Intent(this, HomeActivity.class);
 		startActivity(intent);
 	}
-
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == POST_STORY_CODE) {
+			String toastMsg = resultCode == RESULT_OK
+					? "Posted story to feed"
+					: "Did not post story";
+			Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT).show();
+		}
+	}
 }

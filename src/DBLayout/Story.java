@@ -1,47 +1,72 @@
 package DBLayout;
 
-public class Story {
-	private int id;
-	private int mid;
-	private int numUpVotes;
-	private int numDownVotes;
-	private String timestamp;
-	private String location;
+import com.parse.ParseClassName;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+
+@ParseClassName("Story")
+public class Story extends ParseObject{
+	public final static int IMAGE_TYPE = 0;
+	public final static int AUDIO_TYPE = 1;
+	public final static int VIDEO_TYPE = 2;
 	
-	public int getId() {
-		return id;
+	public Story() {
 	}
-	public void setId(int id) {
-		this.id = id;
+	
+	public String getTitle() {
+		return getString("title");
 	}
-	public int getMid() {
-		return mid;
+	
+	public void setTitle(String title) {
+		put("title", title);
 	}
-	public void setMid(int mid) {
-		this.mid = mid;
+	
+	public String getDescription() {
+		return getString("description");
 	}
-	public int getNumUpVotes() {
-		return numUpVotes;
+	
+	public void setDescription(String description) {
+		put("description", description);
 	}
-	public void setNumUpVotes(int numUpVotes) {
-		this.numUpVotes = numUpVotes;
+	
+	public ParseUser getAuthor() {
+		return getParseUser("author");
 	}
-	public int getNumDownVotes() {
-		return numDownVotes;
+	
+	public void setAuthor(ParseUser user) {
+		put("author", user);
 	}
-	public void setNumDownVotes(int numDownVotes) {
-		this.numDownVotes = numDownVotes;
+	
+	public ParseFile getMediaFile() {
+		return getParseFile("media");
 	}
-	public String getTimestamp() {
-		return timestamp;
+	
+	public void setMediaFile(ParseFile file) {
+		put("media", file);
 	}
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
+	
+	public int getMediaType() {
+		return getInt("mediaType");
 	}
-	public String getLocation() {
-		return location;
+	
+	public void setMediaType(int mediaType) {
+		put("mediaType", mediaType);
 	}
-	public void setLocation(String location) {
-		this.location = location;
+	
+	public int getUpvotes() {
+		return getInt("upvotes");
+	}
+	
+	public void setUpvotes(int upvotes) {
+		put("upvotes", upvotes);
+	}
+	
+	public int getDownvotes() {
+		return getInt("downvotes");
+	}
+	
+	public void setDownvotes(int downvotes) {
+		put("downvotes", downvotes);
 	}
 }

@@ -16,26 +16,38 @@
         android:layout_marginLeft="46dp" >
 
         <TableRow
-            android:id="@+id/tableRow1"
+            android:id="@+id/rowTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
             <EditText
+                android:id="@+id/story_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:hint="@string/story_title" >
+                <requestFocus />
+            </EditText>
+
+        </TableRow>
+        
+        <TableRow
+            android:id="@+id/rowDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <EditText
                 android:id="@+id/story_description"
                 android:layout_width="fill_parent"
                 android:layout_height="200dp"
-                android:layout_marginTop="50dp"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:text="@string/story_description"
-                android:textColor="@android:color/darker_gray" >
-
-                <requestFocus />
+                android:hint="@string/story_description">
             </EditText>
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow4"
+            android:id="@+id/row_icons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
@@ -44,21 +56,21 @@
                 android:layout_height="wrap_content" >
 
                 <ImageView
-                    android:id="@+id/imageView1"
+                    android:id="@+id/camera_icon"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:padding="10dp"
                     android:src="@drawable/camera_icon" />
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/video_icon"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:padding="10dp"
                     android:src="@drawable/video_icon" />
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/microphone_icon"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
                     android:padding="10dp"
@@ -68,21 +80,21 @@
         </TableRow>
     </TableLayout>
 
-    <Button
-        android:id="@+id/post_btn"
+    <ImageView
+        android:id="@+id/gps_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/tableLayout1"
-        android:layout_below="@+id/tableLayout1"
-        android:layout_marginTop="20dp"
-        android:text="@string/post" />
+        android:layout_marginBottom="63dp"
+        android:src="@drawable/gps_icon" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/tmpImagePreview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/post_btn"
-        android:layout_toLeftOf="@+id/post_btn"
-        android:src="@drawable/gps_icon" />
+        android:layout_alignLeft="@+id/tableLayout1"
+        android:layout_alignTop="@+id/gps_icon"
+        android:src="@drawable/user_icon" />
 
 </RelativeLayout>

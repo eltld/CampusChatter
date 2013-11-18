@@ -1,4 +1,5 @@
 <resources>
+    <string name="story_title">Title</string>
     <string name="story_description">Description</string>
     <string name="post">Post</string>
 

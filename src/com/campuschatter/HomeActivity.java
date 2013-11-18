@@ -1,17 +1,16 @@
 package com.campuschatter;
 
-import com.example.campuschatter.R;
-
-import android.os.Bundle;
+import DBLayout.Story;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.example.campuschatter.R;
 import com.parse.Parse;
-import com.parse.ParseAnalytics;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -21,6 +20,7 @@ public class HomeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		ParseObject.registerSubclass(Story.class);
 		Parse.initialize(this, "lKTMKGxVecR5pULQb24OyAJHF8LO5rCJSR514bE9", "xXHvncTYu9dGKt87KGavwa4787DsiUXMCWBy3vKk"); 
 		
 		setContentView(R.layout.campuschatter_home);
