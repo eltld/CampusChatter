@@ -8,79 +8,160 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".FeedActivity" >
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_alignTop="@+id/imageView1"
-        android:layout_marginLeft="19dp"
-        android:src="@drawable/call_police_icon" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView1"
-        android:layout_marginLeft="36dp"
-        android:layout_toRightOf="@+id/imageView1"
-        android:src="@drawable/bluetooth_icon" />
-
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/post_link"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:ems="10" >
-
-        <requestFocus />
-    </EditText>
-
     <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText1"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical" >
+        android:id="@+id/topBar"
+        android:orientation="horizontal" >
 
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/bluetooth"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10" />
+   
+            android:layout_marginLeft="36dp"
+            android:layout_toRightOf="@+id/callPolice"
+            android:src="@drawable/bluetooth_icon" />
 
-        <EditText
-            android:id="@+id/editText3"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/callPolice"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10" />
+            
+            android:layout_toRightOf="@+id/reportPolice"
+            android:src="@drawable/call_police_icon" />
 
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/reportPolice"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10" />
+            
+            
+            android:src="@drawable/police_report_icon" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageView1"
+    <TableLayout
+        android:id="@+id/tableLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="29dp"
-        android:layout_toRightOf="@+id/imageView2"
-        android:src="@drawable/police_report_icon" />
+        android:layout_alignParentLeft="true"
+       
+        android:layout_below="@id/topBar" >
 
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/ImageView01"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_icon" />
+            
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+           
+            <TextView
+                android:id="@+id/MyName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:text="Name"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/MyStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:layout_toRightOf="@+id/imageView1"
+                android:text="Walk into the sky"
+                android:textSize="26dp" />
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/ImageView02"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_icon" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/HisName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:text="Name"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@+id/imageView2"
+                    android:text="Walk into the sky"
+                    android:textSize="26dp" />
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/user_icon" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/HerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textView3"
+                    android:layout_marginLeft="22dp"
+                    android:text="Name"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@+id/imageView1"
+                    android:text="Walk into the sky"
+                    android:textSize="26dp" />
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+
+  
     <ImageView
         android:id="@+id/post_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/editText1"
-        android:layout_alignTop="@+id/imageView4"
-        android:layout_marginRight="36dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/topBar"
         android:src="@drawable/post_icon" />
 
 </RelativeLayout>

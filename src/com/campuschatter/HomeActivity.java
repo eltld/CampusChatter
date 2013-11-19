@@ -28,6 +28,7 @@ public class HomeActivity extends Activity {
 		TextView signinLink = (TextView)findViewById(R.id.signin_link);
 		TextView signupLink = (TextView)findViewById(R.id.signup_link);
 		TextView feedLink = (TextView)findViewById(R.id.feed_link);
+
 		
 		signinLink.setOnClickListener(new OnClickListener() {
 			@Override
@@ -56,7 +57,7 @@ public class HomeActivity extends Activity {
 
 		// Redirect to feeds if already logged in
 		if (ParseUser.getCurrentUser() != null) {
-			Intent intent = new Intent(this, HomePage.class);
+			Intent intent = new Intent(this, FeedActivity.class);
 			startActivity(intent);
 			return;
 		}
