@@ -6,6 +6,7 @@ import DBLayout.Story;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,16 @@ public class FeedActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				postLinkEventHandler(view);
+			}
+		});
+		
+		ImageView callPoliceLink = (ImageView) findViewById(R.id.callPolice);
+		callPoliceLink.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(Intent.ACTION_CALL,
+						Uri.parse("tel:" + getResources().getString(R.string.campus_police_number)));
+				startActivity(intent);
 			}
 		});
 	}
