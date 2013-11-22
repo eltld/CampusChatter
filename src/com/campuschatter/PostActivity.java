@@ -83,7 +83,11 @@ public class PostActivity extends Activity {
 	
 	
 	private void postStory() {
-		storeBytes();
+		if (mediaData == null) {
+			story.setMediaType(Story.NO_MEDIA);
+		} else {
+			storeBytes();
+		}
 		Intent intent = new Intent();
 		setResult(RESULT_OK, intent);
 		finish();

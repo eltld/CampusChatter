@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.campuschatter.R;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 

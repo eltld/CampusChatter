@@ -2,20 +2,24 @@ package com.campuschatter;
 
 import java.util.List;
 
-import com.example.campuschatter.R;
-
-import android.os.Bundle;
+import DBLayout.Story;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.Parse;
-import com.parse.ParseAnalytics;
+import com.example.campuschatter.R;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -23,25 +27,14 @@ import com.parse.ParseUser;
 
 public class FeedActivity extends Activity {
 	private final int POST_STORY_CODE = 1;
-
-	private TextView myName;
-	private TextView myStatus;
-
-	private TextView hisName;
-	private TextView herName;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.campuschatter_feed);
 
-		// these three are just demo, need to change afterwards
-		setTextView();
-		getMeWithStatus();
-
-		ParseUser me = ParseUser.getCurrentUser();
-		myName.setText(me.getUsername());
-
+		loadRows();
+		
 		ImageView postLink = (ImageView) findViewById(R.id.post_link);
 		postLink.setOnClickListener(new OnClickListener() {
 			@Override
@@ -50,32 +43,66 @@ public class FeedActivity extends Activity {
 			}
 		});
 	}
-
-	private void setTextView() {
-		myName = (TextView) findViewById(R.id.MyName);
-		myStatus = (TextView) findViewById(R.id.MyStatus);
-
-		hisName = (TextView) findViewById(R.id.HisName);
-		herName = (TextView) findViewById(R.id.HerName);
+	
+	private void loadRows() {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Story");
+		List<ParseObject> stories;
+		try {
+			query.orderByDescending("updated_at").include("author");
+			stories = query.find();
+			Log.e("Query", "Didn't get media file");
+		} catch (ParseException e) {
+			Toast.makeText(getApplicationContext(),
+					"Unable to load from db", Toast.LENGTH_SHORT).show(); 
+			return;
+		}
+		TableLayout tbl = (TableLayout)findViewById(R.id.feedTable);
+		for (ParseObject story : stories) {
+			tbl.addView(createRow(story));			
+		}
 	}
-
-	// this is used for testing parse, need to change afterwards
-	private void getMeWithStatus() {
-		ParseUser me = ParseUser.getCurrentUser();
-		myName.setText(me.getUsername());
-
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("status");
-		query.whereEqualTo("user", me);
-		query.findInBackground(new FindCallback<ParseObject>() {
-			@Override
-			public void done(List<ParseObject> contents, ParseException e) {
-				if (e == null) {
-					myStatus.setText(contents.get(0).getString("status"));
-				} else {
-
-				}
+	
+	private TableRow createRow(ParseObject story) {
+		// Get data from ParseObject story
+		String title = story.getString("title");
+		String description = story.getString("description");
+		String author = story.getParseUser("author").getUsername();
+		int mediaType = story.getInt("mediaType");
+		byte[] byteArr = null;
+		if (mediaType != Story.NO_MEDIA) {
+			try {
+				byteArr = story.getParseFile("media").getData();
+			} catch (ParseException e) {
+				// It's okay; just a story without media
 			}
-		});
+		}
+		
+		// Populate TableRow with media, title, description, and author
+		TableRow tr = (TableRow)LayoutInflater.from(
+				getApplicationContext()).inflate(R.layout.story_item, null);
+		ImageView ivIcon = (ImageView)tr.findViewById(R.id.story_image);
+		
+		if (mediaType == Story.IMAGE_TYPE) {
+			ivIcon.setImageBitmap(BitmapFactory.decodeByteArray(
+					byteArr, 0, byteArr.length));
+		} else if (mediaType == Story.VIDEO_TYPE) {
+			
+		} else if (mediaType == Story.AUDIO_TYPE) {
+			// default microphone image
+		} else {
+			// default empty image
+			ivIcon.setImageResource(R.drawable.user_icon);
+		}
+		
+		TextView tvTitle = (TextView)tr.findViewById(R.id.story_title);
+		tvTitle.setText(title);
+		
+		TextView tvAuthor = (TextView)tr.findViewById(R.id.story_author);
+		tvAuthor.setText(author);
+		
+		TextView tvDesc = (TextView)tr.findViewById(R.id.story_description);
+		tvDesc.setText(description);
+		return tr;
 	}
 
 	@Override

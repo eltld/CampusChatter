@@ -10,6 +10,7 @@ public class Story extends ParseObject{
 	public final static int IMAGE_TYPE = 0;
 	public final static int AUDIO_TYPE = 1;
 	public final static int VIDEO_TYPE = 2;
+	public final static int NO_MEDIA = 3;
 	
 	public Story() {
 	}

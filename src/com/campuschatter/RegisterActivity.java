@@ -18,8 +18,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.campuschatter.R;
-import com.parse.Parse;
-import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 /**
@@ -27,13 +25,6 @@ import com.parse.ParseUser;
  * well.
  */
 public class RegisterActivity extends Activity {
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
-
 	/**
 	 * The default email to populate the email field with.
 	 */
