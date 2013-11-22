@@ -3,9 +3,13 @@ package com.campuschatter;
 import java.io.ByteArrayOutputStream;
 
 import DBLayout.Story;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
@@ -17,8 +21,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.campuschatter.R;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class PostActivity extends Activity {
 	private Story story;
@@ -28,7 +34,7 @@ public class PostActivity extends Activity {
 	
 	private static final int CAMERA_PIC_REQUEST = 1337;
 	private static final int TAKE_VIDEO_REQUEST = 3;
-	private static final int RECORD_AUDIO_REQUEST = 3;
+	private static final int RECORD_AUDIO_REQUEST = 4;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,24 +87,14 @@ public class PostActivity extends Activity {
 	    }
 	}
 	
-	
 	private void postStory() {
 		if (mediaData == null) {
 			story.setMediaType(Story.NO_MEDIA);
 		}
-		saveStoryInfo();
+		// Change UI to show uploading story
+		showProgress(true);
 		
-		Intent intent = new Intent();
-		if (getParent() == null) {
-			setResult(RESULT_OK, intent);
-		} else {
-			getParent().setResult(RESULT_OK, intent);
-		}
-		finish();
-	}
-	
-	private void saveStoryInfo() {
-		// TODO: Check for inputed text fields (is valid)
+		// Transfer inputs into story object
 		EditText vTitle = (EditText)findViewById(R.id.story_title);
 		EditText vDesc = (EditText)findViewById(R.id.story_description);
 		story.setAuthor(ParseUser.getCurrentUser());
@@ -106,13 +102,17 @@ public class PostActivity extends Activity {
 		story.setDescription(vDesc.getText().toString());
 		story.setUpvotes(0);
 		story.setDownvotes(0);
+
+		// TODO: Check for inputed text fields (is valid)
 		
+		// If no media, just save it
 		if (mediaData == null) {
 			//just store text inputs
-			story.saveInBackground();
+			saveStoryAndReturnToFeed();
 			return;
 		}
 		
+		// Deal with media files
 		String filename;
 		switch(story.getMediaType()) {
 		case Story.IMAGE_TYPE:
@@ -130,7 +130,23 @@ public class PostActivity extends Activity {
 		ParseFile file = new ParseFile(filename, mediaData);
 		file.saveInBackground();
 		story.setMediaFile(file);
-		story.saveInBackground();
+		saveStoryAndReturnToFeed();
+	}
+	
+	private void saveStoryAndReturnToFeed() {
+		story.saveInBackground(new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				showProgress(false);
+				Intent intent = new Intent();
+				if (getParent() == null) {
+					setResult(RESULT_OK, intent);
+				} else {
+					getParent().setResult(RESULT_OK, intent);
+				}
+				finish();
+			}
+		});
 	}
 	
 	private void capturePhoto() {
@@ -174,5 +190,49 @@ public class PostActivity extends Activity {
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	/**
+	 * Shows the progress UI and hides the post form.
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	private void showProgress(final boolean show) {
+		final View mPostStatusView = findViewById(R.id.post_status);
+		final View mPostFormView = findViewById(R.id.post_form);
+		
+		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+		// for very easy animations. If available, use these APIs to fade-in
+		// the progress spinner.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			int shortAnimTime = getResources().getInteger(
+					android.R.integer.config_shortAnimTime);
+
+			mPostStatusView.setVisibility(View.VISIBLE);
+			mPostStatusView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 1 : 0)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mPostStatusView.setVisibility(show ? View.VISIBLE
+									: View.GONE);
+						}
+					});
+
+			mPostFormView.setVisibility(View.VISIBLE);
+			mPostFormView.animate().setDuration(shortAnimTime)
+					.alpha(show ? 0 : 1)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mPostFormView.setVisibility(show ? View.GONE
+									: View.VISIBLE);
+						}
+					});
+		} else {
+			// The ViewPropertyAnimator APIs are not available, so simply show
+			// and hide the relevant UI components.
+			mPostStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+			mPostFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+		}
 	}
 }

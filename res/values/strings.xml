@@ -11,5 +11,7 @@
     <string name="welcome">Welcome to Campus Chatter!</string>
     <string name="title_activity_home_page">HomePage</string>
     <string name="hello_world">Hello world!</string>
+    
+    <string name="refresh">Refresh</string>
 
 </resources>

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.campuschatter.R;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -46,27 +47,34 @@ public class FeedActivity extends Activity {
 	
 	@Override
 	protected void onResume() {
+		Log.d("Reloading", "Called by onResume");
 		loadRows();
 		super.onResume();
 	}
 	
 	private void loadRows() {
+		Log.i("Reloading", "Sending query for updated stories");
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Story");
-		List<ParseObject> stories;
-		try {
-			query.orderByDescending("updated_at").include("author");
-			stories = query.find();
-			Log.e("Query", "Didn't get media file");
-		} catch (ParseException e) {
-			Toast.makeText(getApplicationContext(),
-					"Unable to load from db", Toast.LENGTH_SHORT).show(); 
-			return;
-		}
-		TableLayout tbl = (TableLayout)findViewById(R.id.feedTable);
-		tbl.removeAllViews();
-		for (ParseObject story : stories) {
-			tbl.addView(createRow(story));			
-		}
+		query.orderByDescending("updatedAt").include("author");
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> stories, ParseException e) {
+				if (e == null) {
+					TableLayout tbl = (TableLayout)findViewById(R.id.feedTable);
+					tbl.removeAllViews();
+					Log.i("Reloading", "Cleared table");
+					int i = 0;
+					for (ParseObject story : stories) {
+						tbl.addView(createRow(story), i++);
+					}
+					Log.i("Reloading", "Repopulated table");
+				} else {
+					Toast.makeText(getApplicationContext(),
+							"Unable to load from db", Toast.LENGTH_SHORT).show(); 
+					return;
+				}					
+			}
+		});
 	}
 	
 	private TableRow createRow(ParseObject story) {
@@ -126,6 +134,9 @@ public class FeedActivity extends Activity {
 		case R.id.action_logout:
 			logout();
 			return true;
+		case R.id.action_refresh:
+			loadRows();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -148,10 +159,7 @@ public class FeedActivity extends Activity {
 			String toastMsg = resultCode == RESULT_OK ? "Posted story to feed"
 					: "Did not post story";
 			Toast.makeText(getApplicationContext(), toastMsg,
-					Toast.LENGTH_SHORT).show();
-			
-			// Refresh table of stories
-			loadRows();
+					Toast.LENGTH_LONG).show();
 		}
 	}
 }
