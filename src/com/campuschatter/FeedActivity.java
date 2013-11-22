@@ -44,6 +44,12 @@ public class FeedActivity extends Activity {
 		});
 	}
 	
+	@Override
+	protected void onResume() {
+		loadRows();
+		super.onResume();
+	}
+	
 	private void loadRows() {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Story");
 		List<ParseObject> stories;
@@ -57,6 +63,7 @@ public class FeedActivity extends Activity {
 			return;
 		}
 		TableLayout tbl = (TableLayout)findViewById(R.id.feedTable);
+		tbl.removeAllViews();
 		for (ParseObject story : stories) {
 			tbl.addView(createRow(story));			
 		}
@@ -98,7 +105,7 @@ public class FeedActivity extends Activity {
 		tvTitle.setText(title);
 		
 		TextView tvAuthor = (TextView)tr.findViewById(R.id.story_author);
-		tvAuthor.setText(author);
+		tvAuthor.setText("by " + author);
 		
 		TextView tvDesc = (TextView)tr.findViewById(R.id.story_description);
 		tvDesc.setText(description);
@@ -142,6 +149,9 @@ public class FeedActivity extends Activity {
 					: "Did not post story";
 			Toast.makeText(getApplicationContext(), toastMsg,
 					Toast.LENGTH_SHORT).show();
+			
+			// Refresh table of stories
+			loadRows();
 		}
 	}
 }

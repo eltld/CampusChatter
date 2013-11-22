@@ -9,57 +9,57 @@
     tools:context=".FeedActivity" >
 
     <LinearLayout
+        android:id="@+id/topBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/topBar"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:layout_alignTop="@+id/topBar" >
 
         <ImageView
-            android:id="@+id/bluetooth"
+            android:id="@+id/reportPolice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-   
-            android:layout_marginLeft="36dp"
-	        android:layout_alignTop="@+id/topBar"
-            android:layout_toRightOf="@+id/callPolice"
-            android:src="@drawable/bluetooth_icon" />
-	
-	    <ImageView
-	        android:id="@+id/reportPolice"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="38dp"
-	        android:layout_alignTop="@+id/topBar"
-	        android:layout_toRightOf="@+id/topBar"
-	        android:src="@drawable/police_report_icon" />
-	
-	    <ImageView
-	        android:id="@+id/callPolice"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignTop="@+id/topBar"
-	        android:layout_toRightOf="@+id/topBar"
-	        android:src="@drawable/call_police_icon" />
+            android:layout_marginLeft="38dp"
+            android:src="@drawable/police_report_icon" />
+
+        <ImageView
+            android:id="@+id/callPolice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/call_police_icon" />
         
+	    <ImageView
+	        android:id="@+id/bluetooth"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/bluetooth_icon" />
+	
 	    <ImageView
 	        android:id="@+id/post_link"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="29dp"
-	        android:layout_alignTop="@+id/topBar"
-	        android:layout_toRightOf="@+id/bluetooth"
-        	android:src="@drawable/post_icon" />
-	        
+	        android:src="@drawable/post_icon" />
     </LinearLayout>
 
-    <TableLayout
-        android:id="@+id/feedTable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/topBar" >
-   
-    </TableLayout>
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TableLayout
+                android:id="@+id/feedTable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
 </RelativeLayout>

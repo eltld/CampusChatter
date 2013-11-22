@@ -85,15 +85,19 @@ public class PostActivity extends Activity {
 	private void postStory() {
 		if (mediaData == null) {
 			story.setMediaType(Story.NO_MEDIA);
-		} else {
-			storeBytes();
 		}
+		saveStoryInfo();
+		
 		Intent intent = new Intent();
-		setResult(RESULT_OK, intent);
+		if (getParent() == null) {
+			setResult(RESULT_OK, intent);
+		} else {
+			getParent().setResult(RESULT_OK, intent);
+		}
 		finish();
 	}
 	
-	private void storeBytes() {
+	private void saveStoryInfo() {
 		// TODO: Check for inputed text fields (is valid)
 		EditText vTitle = (EditText)findViewById(R.id.story_title);
 		EditText vDesc = (EditText)findViewById(R.id.story_description);
@@ -105,6 +109,7 @@ public class PostActivity extends Activity {
 		
 		if (mediaData == null) {
 			//just store text inputs
+			story.saveInBackground();
 			return;
 		}
 		
