@@ -7,8 +7,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,37 +33,37 @@ import com.parse.SaveCallback;
 public class PostActivity extends Activity {
 	private Story story;
 	private byte[] mediaData;
-	
+
 	private final int IMAGE_QUALITY = 50;
-	
+
 	private static final int CAMERA_PIC_REQUEST = 1337;
 	private static final int TAKE_VIDEO_REQUEST = 3;
 	private static final int RECORD_AUDIO_REQUEST = 4;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		story = new Story();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.campuschatter_post);
-		
-		ImageView cameraIcon = (ImageView)findViewById(R.id.camera_icon);
-		ImageView videoIcon = (ImageView)findViewById(R.id.video_icon);
-		ImageView audioIcon = (ImageView)findViewById(R.id.microphone_icon);
-		
+
+		ImageView cameraIcon = (ImageView) findViewById(R.id.camera_icon);
+		ImageView videoIcon = (ImageView) findViewById(R.id.video_icon);
+		ImageView audioIcon = (ImageView) findViewById(R.id.microphone_icon);
+
 		cameraIcon.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				capturePhoto();
 			}
 		});
-		
+
 		videoIcon.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				captureVideo();
 			}
 		});
-		
+
 		audioIcon.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -72,31 +76,31 @@ public class PostActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.post, menu);
-	    return super.onCreateOptionsMenu(menu);
+		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
-	        case R.id.action_post:
-	        	postStory();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_post:
+			postStory();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
+
 	private void postStory() {
 		if (mediaData == null) {
 			story.setMediaType(Story.NO_MEDIA);
 		}
 		// Change UI to show uploading story
 		showProgress(true);
-		
+
 		// Transfer inputs into story object
-		EditText vTitle = (EditText)findViewById(R.id.story_title);
-		EditText vDesc = (EditText)findViewById(R.id.story_description);
+		EditText vTitle = (EditText) findViewById(R.id.story_title);
+		EditText vDesc = (EditText) findViewById(R.id.story_description);
 		story.setAuthor(ParseUser.getCurrentUser());
 		story.setTitle(vTitle.getText().toString());
 		story.setDescription(vDesc.getText().toString());
@@ -104,17 +108,17 @@ public class PostActivity extends Activity {
 		story.setDownvotes(0);
 
 		// TODO: Check for inputed text fields (is valid)
-		
+
 		// If no media, just save it
 		if (mediaData == null) {
-			//just store text inputs
+			// just store text inputs
 			saveStoryAndReturnToFeed();
 			return;
 		}
-		
+
 		// Deal with media files
 		String filename;
-		switch(story.getMediaType()) {
+		switch (story.getMediaType()) {
 		case Story.IMAGE_TYPE:
 			filename = "media.jpg";
 			break;
@@ -132,7 +136,7 @@ public class PostActivity extends Activity {
 		story.setMediaFile(file);
 		saveStoryAndReturnToFeed();
 	}
-	
+
 	private void saveStoryAndReturnToFeed() {
 		story.saveInBackground(new SaveCallback() {
 			@Override
@@ -148,25 +152,26 @@ public class PostActivity extends Activity {
 			}
 		});
 	}
-	
+
 	private void capturePhoto() {
 		Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
 	}
-	
+
 	private void captureVideo() {
 		Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 		startActivityForResult(videoIntent, TAKE_VIDEO_REQUEST);
 	}
-	
+
 	private void captureAudio() {
 		// TODO!
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != RESULT_OK) {
-			Toast.makeText(getApplicationContext(), "Unable to store media", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Unable to store media",
+					Toast.LENGTH_SHORT).show();
 			return;
 		}
 		if (requestCode == CAMERA_PIC_REQUEST) {
@@ -175,23 +180,53 @@ public class PostActivity extends Activity {
 			bmp.compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, stream);
 			mediaData = stream.toByteArray();
 			story.setMediaType(Story.IMAGE_TYPE);
-			((ImageView)findViewById(R.id.tmpImagePreview)).setImageBitmap(bmp);
+			((ImageView) findViewById(R.id.tmpImagePreview))
+					.setImageBitmap(bmp);
 		} else if (requestCode == TAKE_VIDEO_REQUEST) {
 			// TODO: Convert data to byte array
+			String videoFile = Uri.decode(data.getDataString());
 			
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			
+			mediaData = stream.toByteArray();
+			Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(videoFile,
+					MediaStore.Images.Thumbnails.MINI_KIND);
+			
+			thumbnail.compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, stream);
+			mediaData = stream.toByteArray();
 			
 			story.setMediaType(Story.VIDEO_TYPE);
+			((ImageView) findViewById(R.id.tmpImagePreview))
+					.setImageBitmap(thumbnail);
+			System.out.println(videoFile);
+			
+			
 		} else if (requestCode == RECORD_AUDIO_REQUEST) {
 			// TODO: Convert data to byte array
-			
-			
 
 			story.setMediaType(Story.AUDIO_TYPE);
 		}
-		
+
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
+	private String getRealPathFromURI(Context context, Uri contentUri) {
+		  Cursor cursor = null;
+		  try { 
+		    String[] proj = { MediaStore.Images.Media.DATA };
+		    cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+		    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+		    cursor.moveToFirst();
+		    return cursor.getString(column_index);
+		  } finally {
+		    if (cursor != null) {
+		      cursor.close();
+		    }
+		  }
+		}
+	
+	
+
 	/**
 	 * Shows the progress UI and hides the post form.
 	 */
@@ -199,7 +234,7 @@ public class PostActivity extends Activity {
 	private void showProgress(final boolean show) {
 		final View mPostStatusView = findViewById(R.id.post_status);
 		final View mPostFormView = findViewById(R.id.post_form);
-		
+
 		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.

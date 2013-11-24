@@ -35,8 +35,10 @@ public class FeedActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.campuschatter_feed);
 
+		// dynamically load rows from parse
 		loadRows();
 		
+		// switch to post page
 		ImageView postLink = (ImageView) findViewById(R.id.post_link);
 		postLink.setOnClickListener(new OnClickListener() {
 			@Override
@@ -45,6 +47,7 @@ public class FeedActivity extends Activity {
 			}
 		});
 		
+		// call the police directly when tap the phone icon
 		ImageView callPoliceLink = (ImageView) findViewById(R.id.callPolice);
 		callPoliceLink.setOnClickListener(new OnClickListener() {
 			@Override
@@ -52,6 +55,7 @@ public class FeedActivity extends Activity {
 				Intent intent = new Intent(Intent.ACTION_CALL,
 						Uri.parse("tel:" + getResources().getString(R.string.campus_police_number)));
 				startActivity(intent);
+				
 			}
 		});
 	}
@@ -173,4 +177,6 @@ public class FeedActivity extends Activity {
 					Toast.LENGTH_LONG).show();
 		}
 	}
+	
+	
 }
