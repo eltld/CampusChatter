@@ -1,6 +1,9 @@
-package com.campuschatter;
+package activities;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import DBLayout.Story;
 import android.animation.Animator;
@@ -11,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.AudioTrack;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
@@ -160,18 +164,24 @@ public class PostActivity extends Activity {
 
 	private void captureVideo() {
 		Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+		videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);
+		videoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
 		startActivityForResult(videoIntent, TAKE_VIDEO_REQUEST);
 	}
 
 	private void captureAudio() {
-		// TODO!
+		Intent audioIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+		audioIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 7);
+		startActivityForResult(audioIntent, RECORD_AUDIO_REQUEST);
 	}
 
+	/**
+	 * Convert data returned from Intent into byte array as mediaData
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != RESULT_OK) {
-			Toast.makeText(getApplicationContext(), "Unable to store media",
-					Toast.LENGTH_SHORT).show();
+			showToast("Did NOT store media");
 			return;
 		}
 		if (requestCode == CAMERA_PIC_REQUEST) {
@@ -183,47 +193,66 @@ public class PostActivity extends Activity {
 			((ImageView) findViewById(R.id.tmpImagePreview))
 					.setImageBitmap(bmp);
 		} else if (requestCode == TAKE_VIDEO_REQUEST) {
-			// TODO: Convert data to byte array
-			String videoFile = Uri.decode(data.getDataString());
-			
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			
-			mediaData = stream.toByteArray();
-			Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(videoFile,
-					MediaStore.Images.Thumbnails.MINI_KIND);
-			
-			thumbnail.compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, stream);
-			mediaData = stream.toByteArray();
-			
+			Uri videoUri = data.getData();
+			convertUriToByteArray(videoUri);
 			story.setMediaType(Story.VIDEO_TYPE);
-			((ImageView) findViewById(R.id.tmpImagePreview))
-					.setImageBitmap(thumbnail);
-			System.out.println(videoFile);
-			
 			
 		} else if (requestCode == RECORD_AUDIO_REQUEST) {
-			// TODO: Convert data to byte array
-
+			Uri audioUri = data.getData();
+			convertUriToByteArray(audioUri);
 			story.setMediaType(Story.AUDIO_TYPE);
 		}
 
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
-	private String getRealPathFromURI(Context context, Uri contentUri) {
-		  Cursor cursor = null;
-		  try { 
-		    String[] proj = { MediaStore.Images.Media.DATA };
-		    cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-		    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-		    cursor.moveToFirst();
-		    return cursor.getString(column_index);
-		  } finally {
-		    if (cursor != null) {
-		      cursor.close();
-		    }
-		  }
+	private void showToast(String str) {
+		Toast.makeText(getApplicationContext(), str,
+				Toast.LENGTH_SHORT).show();
+	}
+	
+	/* Helper methods to save audio/video files as byte[] (mediaData) */
+	private String getRealPathFromURI(Uri contentUri) {
+	  Cursor cursor = null;
+	  try { 
+	    String[] proj = { MediaStore.Images.Media.DATA };
+	    cursor = getApplicationContext().getContentResolver().query(contentUri,  proj, null, null, null);
+	    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	    cursor.moveToFirst();
+	    return cursor.getString(column_index);
+	  } finally {
+	    if (cursor != null) {
+	      cursor.close();
+	    }
+	  }
+	}
+	
+	private void convertUriToByteArray(Uri uri) {
+		if (uri == null) {
+			showToast("videoUri is null");
+			return;
 		}
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		FileInputStream is = null;
+		
+		try {
+			is = new FileInputStream(getRealPathFromURI(uri));
+			byte[] buf = new byte[1024];
+			int n;
+			while (-1 != (n = is.read(buf))) {
+				stream.write(buf, 0, n);
+			}
+			mediaData = stream.toByteArray();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			showToast("FileNotFound uploading video");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			showToast("IO Exception uploading video");
+		}
+	}
 	
 	
 

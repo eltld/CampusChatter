@@ -1,4 +1,4 @@
-package com.campuschatter;
+package activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -19,22 +20,28 @@ import android.widget.TextView;
 import com.example.campuschatter.R;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-public class LoginActivity extends Activity {
+public class RegisterActivity extends Activity {
+	/**
+	 * The default email to populate the email field with.
+	 */
+	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
 
 	// Values for email and password at the time of the login attempt.
+	private String mEmail;
 	private String mUsername;
 	private String mPassword;
 
 	// UI references.
+	private EditText mEmailView;
 	private EditText mUsernameView;
 	private EditText mPasswordView;
 	private View mLoginFormView;
@@ -45,34 +52,38 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.campuschatter_login);
+		setContentView(R.layout.campuschatter_register);
 
 		// Set up the login form.
-		mUsernameView = (EditText) findViewById(R.id.username);
+		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+		mEmailView = (EditText) findViewById(R.id.register_email);
+		mEmailView.setText(mEmail);
 
-		mPasswordView = (EditText) findViewById(R.id.password);
+		mUsernameView = (EditText) findViewById(R.id.register_username);
+		
+		mPasswordView = (EditText) findViewById(R.id.register_password);
 		mPasswordView
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 					@Override
 					public boolean onEditorAction(TextView textView, int id,
 							KeyEvent keyEvent) {
 						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
+							attemptRegister();
 							return true;
 						}
 						return false;
 					}
 				});
 
-		mLoginFormView = findViewById(R.id.login_form);
-		mLoginStatusView = findViewById(R.id.login_status);
-		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+		mLoginFormView = findViewById(R.id.register_form);
+		mLoginStatusView = findViewById(R.id.register_status);
+		mLoginStatusMessageView = (TextView) findViewById(R.id.register_status_message);
 
-		findViewById(R.id.sign_in_btn).setOnClickListener(
+		findViewById(R.id.sign_up_btn).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						attemptLogin();
+						attemptRegister();
 					}
 				});
 	}
@@ -80,7 +91,7 @@ public class LoginActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.login, menu);
+		getMenuInflater().inflate(R.menu.register, menu);
 		return true;
 	}
 
@@ -89,16 +100,18 @@ public class LoginActivity extends Activity {
 	 * If there are form errors (invalid email, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
-	public void attemptLogin() {
+	public void attemptRegister() {
 		if (mAuthTask != null) {
 			return;
 		}
 
 		// Reset errors.
+		mEmailView.setError(null);
 		mUsernameView.setError(null);
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
+		mEmail = mEmailView.getText().toString();
 		mUsername = mUsernameView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
 
@@ -116,21 +129,32 @@ public class LoginActivity extends Activity {
 			cancel = true;
 		}
 
+		// Check for a valid email address.
+		if (TextUtils.isEmpty(mEmail)) {
+			mEmailView.setError(getString(R.string.error_field_required));
+			focusView = mEmailView;
+			cancel = true;
+		} else if (!mEmail.contains("@")) {
+			mEmailView.setError(getString(R.string.error_invalid_email));
+			focusView = mEmailView;
+			cancel = true;
+		}
+		
 		// Check for a valid username.
 		if (TextUtils.isEmpty(mUsername)) {
 			mUsernameView.setError(getString(R.string.error_field_required));
 			focusView = mUsernameView;
 			cancel = true;
-		}
+		} 
 
 		if (cancel) {
-			// There was an error; don't attempt login and focus the first
+			// There was an error; don't attempt register and focus the first
 			// form field with an error.
 			focusView.requestFocus();
 		} else {
 			// Show a progress spinner, and kick off a background task to
-			// perform the user login attempt.
-			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+			// perform the user register attempt.
+			mLoginStatusMessageView.setText(R.string.register_progress_signing_up);
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
 			mAuthTask.execute((Void) null);
@@ -183,8 +207,7 @@ public class LoginActivity extends Activity {
 	 * the user.
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-		private String errorMsg;
-		
+		String errorMsg = "";
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
@@ -195,14 +218,21 @@ public class LoginActivity extends Activity {
 			} catch (InterruptedException e) {
 				return false;
 			}
-
+			ParseUser u = new ParseUser();
+			u.setEmail(mEmail);
+			u.setUsername(mUsername);
+			u.setPassword(mPassword);
+			
 			try {
-				ParseUser.logIn(mUsername, mPassword);
-				return true;
+				u.signUp();
 			} catch (ParseException e) {
+				Log.e("User Input", e.getMessage());
 				errorMsg = e.getMessage();
+				return false;
 			}
-			return false;
+
+			// TODO: register the new account here.
+			return true;
 		}
 
 		@Override
@@ -212,11 +242,14 @@ public class LoginActivity extends Activity {
 
 			if (success) {
 				finish();
-				Intent intent = new Intent(LoginActivity.this, FeedActivity.class);
+				Intent intent = new Intent(RegisterActivity.this, FeedActivity.class);
 				startActivity(intent);
 			} else {
-				mPasswordView.setError(errorMsg);
-				mPasswordView.requestFocus();
+				TextView tError = errorMsg.contains("username")
+						? mUsernameView
+						: mEmailView;
+				tError.setError(errorMsg);
+				tError.requestFocus();
 			}
 		}
 

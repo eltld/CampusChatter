@@ -1,4 +1,4 @@
-package com.campuschatter;
+package activities;
 
 import DBLayout.Story;
 import android.app.Activity;

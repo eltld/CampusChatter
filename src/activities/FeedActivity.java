@@ -1,4 +1,4 @@
-package com.campuschatter;
+package activities;
 
 import java.util.List;
 
