@@ -1,6 +1,10 @@
 package entities;
 
+import android.content.Context;
+
 public interface Bluetooth {
-	public int setupConnection(String address);
-	public int sendFile(String filepath);
+	public void discoverableDevices(Context context);
+	public int setup();
+	public void enableDiscoverable(Context context);
+	public void sendFile(String filepath, Context context);
 }
