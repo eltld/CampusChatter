@@ -15,9 +15,5 @@
     <!-- Feed strings -->
     <string name="refresh">Refresh</string>
     <string name="campus_police_number">6265898065</string>
-    
-    <string name="start_recording">Start Recording</string>
-    <string name="stop_recording">Stop Recording</string>
-    <string name="preview_recording">Preview Recording</string>
 
 </resources>

@@ -10,12 +10,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.AudioTrack;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -196,7 +193,6 @@ public class PostActivity extends Activity {
 			Uri videoUri = data.getData();
 			convertUriToByteArray(videoUri);
 			story.setMediaType(Story.VIDEO_TYPE);
-			
 		} else if (requestCode == RECORD_AUDIO_REQUEST) {
 			Uri audioUri = data.getData();
 			convertUriToByteArray(audioUri);

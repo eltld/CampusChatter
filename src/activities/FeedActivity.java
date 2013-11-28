@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -111,17 +113,21 @@ public class FeedActivity extends Activity {
 		TableRow tr = (TableRow)LayoutInflater.from(
 				getApplicationContext()).inflate(R.layout.story_item, null);
 		ImageView ivIcon = (ImageView)tr.findViewById(R.id.story_image);
-		
+		ImageView overlay = (ImageView)tr.findViewById(R.id.video_overlay);
 		if (mediaType == Story.IMAGE_TYPE) {
 			ivIcon.setImageBitmap(BitmapFactory.decodeByteArray(
 					byteArr, 0, byteArr.length));
 		} else if (mediaType == Story.VIDEO_TYPE) {
+			// TODO: set ivIcon to be a part of video
+			ivIcon.setImageResource(R.drawable.video_icon);
+			ivIcon.setScaleType(ScaleType.FIT_XY);
 			
+			overlay.setVisibility(View.VISIBLE);
 		} else if (mediaType == Story.AUDIO_TYPE) {
-			// default microphone image
+			ivIcon.setImageResource(R.drawable.play_audio);
+			overlay.setVisibility(View.VISIBLE);
 		} else {
-			// default empty image
-			ivIcon.setImageResource(R.drawable.user_icon);
+			// default empty image as user icon
 		}
 		
 		TextView tvTitle = (TextView)tr.findViewById(R.id.story_title);
