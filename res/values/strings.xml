@@ -9,5 +9,11 @@
     <string name="signin">Sign In</string>
     <string name="signup">Sign Up</string>
     <string name="welcome">Welcome to Campus Chatter!</string>
+    <string name="title_activity_home_page">HomePage</string>
+    <string name="hello_world">Hello world!</string>
+
+    <!-- Feed strings -->
+    <string name="refresh">Refresh</string>
+    <string name="campus_police_number">6265898065</string>
 
 </resources>

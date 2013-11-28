@@ -2,85 +2,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".FeedActivity" >
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_alignTop="@+id/imageView1"
-        android:layout_marginLeft="19dp"
-        android:src="@drawable/call_police_icon" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView1"
-        android:layout_marginLeft="36dp"
-        android:layout_toRightOf="@+id/imageView1"
-        android:src="@drawable/bluetooth_icon" />
-
-    <EditText
-        android:id="@+id/editText1"
+    <LinearLayout
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/post_link"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:ems="10" >
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="10dp">
 
-        <requestFocus />
-    </EditText>
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText1"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical" >
-
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/reportPolice"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:ems="10" />
+            android:src="@drawable/police_report_icon" />
 
-        <EditText
-            android:id="@+id/editText3"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/callPolice"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:ems="10" />
-
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10" />
+            android:src="@drawable/call_police_icon" />
+        
+	    <ImageView
+	        android:id="@+id/bluetooth"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/bluetooth_icon" />
+	
+	    <ImageView
+	        android:id="@+id/post_link"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/post_icon" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="29dp"
-        android:layout_toRightOf="@+id/imageView2"
-        android:src="@drawable/police_report_icon" />
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:scrollbars="none" >
 
-    <ImageView
-        android:id="@+id/post_link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/editText1"
-        android:layout_alignTop="@+id/imageView4"
-        android:layout_marginRight="36dp"
-        android:src="@drawable/post_icon" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TableLayout
+                android:id="@+id/feedTable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.campuschatter;
+package activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.campuschatter.R;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
