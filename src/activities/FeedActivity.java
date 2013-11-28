@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,8 +30,11 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import entities.BluetoothAPI;
+
 public class FeedActivity extends Activity {
-	private final int POST_STORY_CODE = 1;
+	private final int POST_STORY_REQUEST = 1;
+	private final int BLUETOOTH_REQUEST = 2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,16 @@ public class FeedActivity extends Activity {
 						Uri.parse("tel:" + getResources().getString(R.string.campus_police_number)));
 				startActivity(intent);
 				
+			}
+		});
+		
+		// Bluetooth - take picture then share with friend
+		ImageView bluetoothLink = (ImageView) findViewById(R.id.bluetooth);
+		bluetoothLink.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				startActivityForResult(cameraIntent, BLUETOOTH_REQUEST);
 			}
 		});
 	}
@@ -165,7 +179,7 @@ public class FeedActivity extends Activity {
 
 	public void postLinkEventHandler(View view) {
 		Intent intent = new Intent(this, PostActivity.class);
-		startActivityForResult(intent, POST_STORY_CODE);
+		startActivityForResult(intent, POST_STORY_REQUEST);
 	}
 
 	public void logout() {
@@ -176,11 +190,16 @@ public class FeedActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == POST_STORY_CODE) {
+		if (requestCode == POST_STORY_REQUEST) {
 			String toastMsg = resultCode == RESULT_OK ? "Posted story to feed"
 					: "Did not post story";
 			Toast.makeText(getApplicationContext(), toastMsg,
 					Toast.LENGTH_LONG).show();
+		} else if (requestCode == BLUETOOTH_REQUEST) {
+			Uri uri = data.getData();
+			String path = ActivitiesHelper.getRealPathFromURI(getApplicationContext(), uri);
+			BluetoothAPI bluetooth = new BluetoothAPI();
+			bluetooth.sendFile(path, getApplicationContext());
 		}
 	}
 	
