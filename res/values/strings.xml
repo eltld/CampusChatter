@@ -10,10 +10,12 @@
     <string name="signup">Sign Up</string>
     <string name="welcome">Welcome to Campus Chatter!</string>
     <string name="title_activity_home_page">HomePage</string>
+    <string name="title_activity_view_story">ViewStoryActivity</string>
     <string name="hello_world">Hello world!</string>
 
     <!-- Feed strings -->
     <string name="refresh">Refresh</string>
     <string name="campus_police_number">6265898065</string>
-
+    
+    <string name="story_author">Author</string>
 </resources>

@@ -30,6 +30,8 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import entities.ActivitiesHelper;
+
 public class PostActivity extends Activity {
 	private Story story;
 	private byte[] mediaData;

@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -30,6 +29,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import entities.ActivitiesHelper;
 import entities.BluetoothAPI;
 
 public class FeedActivity extends Activity {
@@ -79,8 +79,13 @@ public class FeedActivity extends Activity {
 	@Override
 	protected void onResume() {
 		Log.d("Reloading", "Called by onResume");
-		loadRows();
+		//clearRows();
+		//loadRows();
 		super.onResume();
+	}
+	private void clearRows() {
+		TableLayout tbl = (TableLayout)findViewById(R.id.feedTable);
+		tbl.removeAllViews();
 	}
 	
 	private void loadRows() {
@@ -92,8 +97,6 @@ public class FeedActivity extends Activity {
 			public void done(List<ParseObject> stories, ParseException e) {
 				if (e == null) {
 					TableLayout tbl = (TableLayout)findViewById(R.id.feedTable);
-					tbl.removeAllViews();
-					Log.i("Reloading", "Cleared table");
 					int i = 0;
 					for (ParseObject story : stories) {
 						tbl.addView(createRow(story), i++);
@@ -110,22 +113,40 @@ public class FeedActivity extends Activity {
 	
 	private TableRow createRow(ParseObject story) {
 		// Get data from ParseObject story
-		String title = story.getString("title");
-		String description = story.getString("description");
-		String author = story.getParseUser("author").getUsername();
-		int mediaType = story.getInt("mediaType");
-		byte[] byteArr = null;
-		if (mediaType != Story.NO_MEDIA) {
-			try {
-				byteArr = story.getParseFile("media").getData();
-			} catch (ParseException e) {
-				// It's okay; just a story without media
-			}
-		}
+		final String title = story.getString("title");
+		final String description = story.getString("description");
+		final String author = story.getParseUser("author").getUsername();
+		final int mediaType = story.getInt("mediaType");
 		
 		// Populate TableRow with media, title, description, and author
 		TableRow tr = (TableRow)LayoutInflater.from(
 				getApplicationContext()).inflate(R.layout.story_item, null);
+
+		TextView tvTitle = (TextView)tr.findViewById(R.id.story_title);
+		tvTitle.setText(title);
+		
+		TextView tvAuthor = (TextView)tr.findViewById(R.id.story_author);
+		tvAuthor.setText("by " + author);
+		
+		TextView tvDesc = (TextView)tr.findViewById(R.id.story_description);
+		tvDesc.setText(description);
+		if (mediaType == Story.NO_MEDIA) {
+			tr.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					storyOnClickHandler(title, author, description, null, mediaType);
+				}
+			});
+			return tr;
+		}
+
+		final byte[] byteArr;
+		try {
+			byteArr = story.getParseFile("media").getData();
+		} catch (ParseException e) {
+			return tr;
+		}
+		
 		ImageView ivIcon = (ImageView)tr.findViewById(R.id.story_image);
 		ImageView overlay = (ImageView)tr.findViewById(R.id.video_overlay);
 		if (mediaType == Story.IMAGE_TYPE) {
@@ -140,18 +161,14 @@ public class FeedActivity extends Activity {
 		} else if (mediaType == Story.AUDIO_TYPE) {
 			ivIcon.setImageResource(R.drawable.play_audio);
 			overlay.setVisibility(View.VISIBLE);
-		} else {
-			// default empty image as user icon
 		}
 		
-		TextView tvTitle = (TextView)tr.findViewById(R.id.story_title);
-		tvTitle.setText(title);
-		
-		TextView tvAuthor = (TextView)tr.findViewById(R.id.story_author);
-		tvAuthor.setText("by " + author);
-		
-		TextView tvDesc = (TextView)tr.findViewById(R.id.story_description);
-		tvDesc.setText(description);
+		tr.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				storyOnClickHandler(title, author, description, byteArr, mediaType);
+			}
+		});
 		return tr;
 	}
 
@@ -170,6 +187,7 @@ public class FeedActivity extends Activity {
 			logout();
 			return true;
 		case R.id.action_refresh:
+			clearRows();
 			loadRows();
 			return true;
 		default:
@@ -201,6 +219,21 @@ public class FeedActivity extends Activity {
 			BluetoothAPI bluetooth = new BluetoothAPI();
 			bluetooth.sendFile(path, getApplicationContext());
 		}
+	}
+	
+	private void storyOnClickHandler(
+			String title,
+			String author,
+			String description,
+			byte[] byteArr,
+			int mediaType) {
+		Intent intent = new Intent(getApplicationContext(), ViewStoryActivity.class);
+		intent.putExtra("title", title);
+		intent.putExtra("author", author);
+		intent.putExtra("description", description);
+		intent.putExtra("media", byteArr);
+		intent.putExtra("mediaType", mediaType);
+		startActivity(intent);
 	}
 	
 	

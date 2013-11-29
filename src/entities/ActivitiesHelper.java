@@ -1,4 +1,4 @@
-package activities;
+package entities;
 
 import android.content.Context;
 import android.database.Cursor;
