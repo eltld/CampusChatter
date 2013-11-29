@@ -4,6 +4,7 @@ import java.util.List;
 
 import DBLayout.Story;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -43,6 +44,13 @@ public class FeedActivity extends Activity {
 
 		// dynamically load rows from parse
 		loadRows();
+		
+		ImageView reportLink = (ImageView) findViewById(R.id.reportPolice);
+		reportLink.setOnClickListener(new OnClickListener(){
+			public void onClick(View view){
+				reportLinkEventHandler(view);
+			}
+		});
 		
 		// switch to post page
 		ImageView postLink = (ImageView) findViewById(R.id.post_link);
@@ -198,6 +206,19 @@ public class FeedActivity extends Activity {
 	public void postLinkEventHandler(View view) {
 		Intent intent = new Intent(this, PostActivity.class);
 		startActivityForResult(intent, POST_STORY_REQUEST);
+	}
+	
+	public void reportLinkEventHandler(View view) {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("plain/text");
+		intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"campuspd@andrew.cmu.edu"});
+		intent.putExtra(Intent.EXTRA_SUBJECT, "Report from CampusChatter");
+		intent.putExtra(Intent.EXTRA_TEXT, "Detail Description");
+		try {
+		    startActivity(Intent.createChooser(intent, "Send mail..."));
+		} catch (ActivityNotFoundException e) {
+		    Toast.makeText(FeedActivity.this, "Email Client Error!", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	public void logout() {
