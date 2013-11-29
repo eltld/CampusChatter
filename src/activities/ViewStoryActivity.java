@@ -13,6 +13,9 @@ import android.widget.VideoView;
 
 import com.example.campuschatter.R;
 
+import entities.PlayVideo;
+import entities.PlayVideoAPI;
+
 public class ViewStoryActivity extends Activity {
 
 	@Override
@@ -43,7 +46,8 @@ public class ViewStoryActivity extends Activity {
 					getApplicationContext()).inflate(R.layout.video_story, null);
 			
 			// TODO: convert byte[] media into URI
-			// call PlayVideoAPI.playVideo();
+			PlayVideo pv = new PlayVideoAPI();
+			pv.playVideo(media, vv, this);
 			fl.addView(vv);
 		} else if (mediaType == Story.AUDIO_TYPE) {
 			

@@ -6,7 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-public class CompassAPI implements SensorEventListener {
+public class CompassAPI implements SensorEventListener,Compass {
 	private double azimuth = -1;
 	SensorManager mSensorManager;
 	Sensor accelerometer;
