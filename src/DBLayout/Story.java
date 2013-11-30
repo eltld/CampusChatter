@@ -79,4 +79,12 @@ public class Story extends ParseObject {
 	public void setLocation(ParseGeoPoint value) {
 		put("location", value);
 	}
+	
+	public double getCompass(){
+		return getDouble("compass");
+	}
+	
+	public void setCompass(double compassValue){
+		put("compass", compassValue);
+	}
 }

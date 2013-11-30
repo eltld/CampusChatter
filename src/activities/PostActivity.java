@@ -34,6 +34,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import entities.ActivitiesHelper;
+import entities.CompassAPI;
 import entities.GPSAPI;
 
 public class PostActivity extends Activity {
@@ -50,6 +51,7 @@ public class PostActivity extends Activity {
 	
 	TextView latitudeField;
 	TextView longitudeField;
+	TextView compassField;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class PostActivity extends Activity {
 		
 		latitudeField = (TextView) findViewById(R.id.lati);
 	    longitudeField = (TextView) findViewById(R.id.logi);
+	    compassField = (TextView) findViewById(R.id.compass);
 
 		cameraIcon.setOnClickListener(new OnClickListener() {
 			@Override
@@ -121,6 +124,7 @@ public class PostActivity extends Activity {
 		showProgress(true);
 		double lati = Double.parseDouble(latitudeField.getText().toString());
 		double longi = Double.parseDouble(longitudeField.getText().toString());	
+		double compassValue = Double.parseDouble(compassField.getText().toString());
 
 		// Transfer inputs into story object
 		EditText vTitle = (EditText) findViewById(R.id.story_title);
@@ -133,6 +137,7 @@ public class PostActivity extends Activity {
 		story.setUpvotes(0);
 		story.setDownvotes(0);
 		story.setLocation(myPoint);
+		story.setCompass(compassValue);
 
 		// If no media, just save it
 		if (mediaData == null) {
@@ -199,10 +204,14 @@ public class PostActivity extends Activity {
 	private void captureGPS(){
 		GPSAPI gps = new GPSAPI();
 		gps.createGPS(context);
-		double latitudeValue =  (gps.getLatitude());
-		double longitudeValue =  (gps.getLongitude());
+		int latitudeValue = (int) (gps.getLatitude());
+		int longitudeValue = (int) (gps.getLongitude());
 		latitudeField.setText(String.valueOf(latitudeValue));
 		longitudeField.setText(String.valueOf(longitudeValue));	
+		
+		CompassAPI comp = new CompassAPI();
+		comp.CreateCompass(context);
+		compassField.setText(String.valueOf(comp.getAzimuth()));
 	}
 	
 	private ParseGeoPoint geoPointFromLocation(double latitude, double longitude) {

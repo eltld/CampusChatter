@@ -130,6 +130,7 @@ public class FeedActivity extends Activity {
 		final String description = story.getString("description");
 		final String author = story.getParseUser("author").getUsername();
 		final ParseGeoPoint location = story.getParseGeoPoint("location");
+		final double compassValue = story.getDouble("compass");
 		final int mediaType = story.getInt("mediaType");
 
 		// Populate TableRow with media, title, description, and author
@@ -147,8 +148,9 @@ public class FeedActivity extends Activity {
 
 		TextView tvLoc = (TextView) tr.findViewById(R.id.story_gps);
 		if (location != null) {
-			tvLoc.setText(String.valueOf((int) location.getLatitude()) + ", "
-					+ String.valueOf((int) location.getLongitude()));
+			tvLoc.setText("GPS " + String.valueOf((int) location.getLatitude())
+					+ ", " + String.valueOf((int) location.getLongitude())
+					+ " Compass " + String.valueOf(compassValue));
 		}
 
 		if (mediaType == Story.NO_MEDIA) {

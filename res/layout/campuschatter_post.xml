@@ -128,25 +128,60 @@
 	        </TableRow>
 	        <TableRow
 	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content" >
+	            android:layout_height="wrap_content" 
+	            android:weightSum="3" >
+	            
+	            <TextView
+	                android:id="@+id/LongiDesc"
+	                android:layout_width="0dp"
+	                android:layout_weight="1"
+	                android:layout_height="wrap_content"
+	                android:text = "Longititude: " />
 
 	            <TextView
 	                android:id="@+id/logi"
-	                android:layout_width="wrap_content"
+	                android:layout_width="0dp"
 	                android:layout_height="wrap_content"
-	                
+	                android:layout_weight="2"
 	                android:textAppearance="?android:attr/textAppearanceMedium" />
 	            
 	        </TableRow>
 	        <TableRow
 	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content" >
+	            android:layout_height="wrap_content" 
+	            android:weightSum="3" >
+	            
+	            <TextView
+	                android:id="@+id/LatiDesc"
+	                android:layout_width="0dp"
+	                android:layout_weight="1"
+	                android:layout_height="wrap_content"
+	                android:text = "Latitude: " />
 
 	            <TextView
 	                android:id="@+id/lati"
-	                android:layout_width="wrap_content"
+	                android:layout_width="0dp"
 	                android:layout_height="wrap_content"
-	                
+	                android:layout_weight="2"
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
+	            
+	        </TableRow>
+	        
+	        <TableRow
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:weightSum="3" >
+				<TextView
+	                android:id="@+id/compassDesc"
+	                android:layout_width="0dp"
+	                android:layout_weight="1"
+	                android:layout_height="wrap_content"
+	                android:text = "Compass: " />
+	            <TextView
+	                android:id="@+id/compass"
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="2"
 	                android:textAppearance="?android:attr/textAppearanceMedium" />
 	            
 	        </TableRow>
