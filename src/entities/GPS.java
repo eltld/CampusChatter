@@ -1,6 +1,7 @@
 package entities;
 
 import android.content.Context;
+import android.location.Location;
 
 public interface GPS {
 	public double getLatitude();

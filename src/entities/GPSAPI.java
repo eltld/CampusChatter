@@ -35,4 +35,6 @@ public class GPSAPI implements GPS{
 	public double getLongitude() {
 		return lng;
 	}
+
+	
 }

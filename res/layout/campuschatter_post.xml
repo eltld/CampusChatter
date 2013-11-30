@@ -126,6 +126,31 @@
 	                android:src="@drawable/gps_icon" />
 	            
 	        </TableRow>
+	        <TableRow
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content" >
+
+	            <TextView
+	                android:id="@+id/logi"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
+	            
+	        </TableRow>
+	        <TableRow
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content" >
+
+	            <TextView
+	                android:id="@+id/lati"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                
+	                android:textAppearance="?android:attr/textAppearanceMedium" />
+	            
+	        </TableRow>
+	        
 	    </TableLayout>
 	
     </ScrollView>

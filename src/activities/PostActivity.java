@@ -10,6 +10,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -22,15 +23,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.campuschatter.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import entities.ActivitiesHelper;
+import entities.GPSAPI;
 
 public class PostActivity extends Activity {
 	private Story story;
@@ -41,6 +45,11 @@ public class PostActivity extends Activity {
 	private static final int CAMERA_PIC_REQUEST = 1337;
 	private static final int TAKE_VIDEO_REQUEST = 3;
 	private static final int RECORD_AUDIO_REQUEST = 4;
+	
+	private Context context = this;
+	
+	TextView latitudeField;
+	TextView longitudeField;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +60,10 @@ public class PostActivity extends Activity {
 		ImageView cameraIcon = (ImageView) findViewById(R.id.camera_icon);
 		ImageView videoIcon = (ImageView) findViewById(R.id.video_icon);
 		ImageView audioIcon = (ImageView) findViewById(R.id.microphone_icon);
+		ImageView gpsIcon = (ImageView) findViewById(R.id.gps_icon);
+		
+		latitudeField = (TextView) findViewById(R.id.lati);
+	    longitudeField = (TextView) findViewById(R.id.logi);
 
 		cameraIcon.setOnClickListener(new OnClickListener() {
 			@Override
@@ -70,6 +83,13 @@ public class PostActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				captureAudio();
+			}
+		});
+		
+		gpsIcon.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				captureGPS();
 			}
 		});
 	}
@@ -99,17 +119,20 @@ public class PostActivity extends Activity {
 		}
 		// Change UI to show uploading story
 		showProgress(true);
+		double lati = Double.parseDouble(latitudeField.getText().toString());
+		double longi = Double.parseDouble(longitudeField.getText().toString());	
 
 		// Transfer inputs into story object
 		EditText vTitle = (EditText) findViewById(R.id.story_title);
 		EditText vDesc = (EditText) findViewById(R.id.story_description);
+		final ParseGeoPoint myPoint = geoPointFromLocation(lati, longi);
+		
 		story.setAuthor(ParseUser.getCurrentUser());
 		story.setTitle(vTitle.getText().toString());
 		story.setDescription(vDesc.getText().toString());
 		story.setUpvotes(0);
 		story.setDownvotes(0);
-
-		// TODO: Check for inputed text fields (is valid)
+		story.setLocation(myPoint);
 
 		// If no media, just save it
 		if (mediaData == null) {
@@ -172,6 +195,19 @@ public class PostActivity extends Activity {
 		audioIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 7);
 		startActivityForResult(audioIntent, RECORD_AUDIO_REQUEST);
 	}
+	
+	private void captureGPS(){
+		GPSAPI gps = new GPSAPI();
+		gps.createGPS(context);
+		double latitudeValue =  (gps.getLatitude());
+		double longitudeValue =  (gps.getLongitude());
+		latitudeField.setText(String.valueOf(latitudeValue));
+		longitudeField.setText(String.valueOf(longitudeValue));	
+	}
+	
+	private ParseGeoPoint geoPointFromLocation(double latitude, double longitude) {
+		  return new ParseGeoPoint(latitude, longitude);
+	}
 
 	/**
 	 * Convert data returned from Intent into byte array as mediaData
@@ -198,7 +234,7 @@ public class PostActivity extends Activity {
 			Uri audioUri = data.getData();
 			convertUriToByteArray(audioUri);
 			story.setMediaType(Story.AUDIO_TYPE);
-		}
+		} 
 
 		super.onActivityResult(requestCode, resultCode, data);
 	}
