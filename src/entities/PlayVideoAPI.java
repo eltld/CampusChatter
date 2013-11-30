@@ -26,8 +26,7 @@ public class PlayVideoAPI implements PlayVideo{
 	public void playVideo(byte[] video, VideoView videoView, Context context) {
 		FileOutputStream out = null;
 		try {
-			String loc = Environment.getExternalStorageDirectory().toString() + "/video/";
-			loc += System.currentTimeMillis() + ".mp4";
+			String loc = "video"+System.currentTimeMillis()+".mp4";
 			out = new FileOutputStream(loc);
 			out.write(video);
 			out.close();
