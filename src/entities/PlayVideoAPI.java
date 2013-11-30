@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,14 +28,16 @@ public class PlayVideoAPI implements PlayVideo{
 		FileOutputStream out = null;
 		try {
 			String loc = "video"+System.currentTimeMillis()+".mp4";
-			out = new FileOutputStream(loc);
+			File newfile = new File(context.getFilesDir() + "/"+loc);
+			out = new FileOutputStream(newfile);
 			out.write(video);
 			out.close();
 			MediaController mediaController= new MediaController(context);
 			mediaController.setAnchorView(videoView);
 
+			System.out.println("Failed to write");
 			videoView.setMediaController(mediaController);
-			videoView.setVideoPath(loc);
+			videoView.setVideoPath(context.getFilesDir() + "/"+loc);
 			videoView.requestFocus();
 
 			videoView.start();

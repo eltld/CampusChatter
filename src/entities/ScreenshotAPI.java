@@ -22,7 +22,7 @@ public class ScreenshotAPI implements Screenshot{
 	@Override
 	public int takeScreenshot(Activity context) {
 		// Some constants
-		final String SCREENSHOTS_LOCATIONS = Environment.getExternalStorageDirectory().toString() + "/screenshots/";
+		final String SCREENSHOTS_LOCATIONS = "screenshots/";
 
 		// Get device dimmensions
 		Display display = context.getWindowManager().getDefaultDisplay();
