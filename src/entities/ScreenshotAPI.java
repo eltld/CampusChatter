@@ -1,18 +1,17 @@
 package entities;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources.Theme;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -52,13 +51,9 @@ public class ScreenshotAPI implements Screenshot{
 
 		// Save the screenshot to the file system
 		FileOutputStream fos = null;
+		String loc = "img" + System.currentTimeMillis() + ".jpg";
 		try {
-		    final File sddir = new File(SCREENSHOTS_LOCATIONS);
-		    if (!sddir.exists()) {
-		        sddir.mkdirs();
-		    }
-		    fos = new FileOutputStream(SCREENSHOTS_LOCATIONS
-		            + System.currentTimeMillis() + ".jpg");
+			fos = context.openFileOutput(loc, Context.MODE_WORLD_READABLE);
 		    if (fos != null) {
 		        if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos)) {
 		            Log.d(SCREENSHOTS_LOCATIONS, "Compress/Write failed");
