@@ -11,8 +11,11 @@ import android.widget.TextView;
 
 import com.example.campuschatter.R;
 import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.PushService;
 
 public class HomeActivity extends Activity {
 
@@ -61,6 +64,17 @@ public class HomeActivity extends Activity {
 			startActivity(intent);
 			return;
 		}
+		
+		// push notifications
+		Parse.initialize(this, "lKTMKGxVecR5pULQb24OyAJHF8LO5rCJSR514bE9", "xXHvncTYu9dGKt87KGavwa4787DsiUXMCWBy3vKk");
+		 // Specify a Activity to handle all pushes by default.
+        PushService.setDefaultPushCallback(this, HomeActivity.class);
+        
+        // Save the current installation.
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+        
+        ParseAnalytics.trackAppOpened(getIntent());
+        PushService.subscribe(this, "Giants", HomeActivity.class);
 	}
 
 	@Override

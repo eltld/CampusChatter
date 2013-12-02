@@ -25,11 +25,15 @@ import android.widget.Toast;
 
 import com.example.campuschatter.R;
 import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
 
 import entities.ActivitiesHelper;
 import entities.BluetoothAPI;
@@ -40,9 +44,14 @@ public class FeedActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.campuschatter_feed);
-
+		
+		
+		
+		
+		
 		// dynamically load rows from parse
 		loadRows();
 
