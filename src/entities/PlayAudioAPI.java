@@ -30,10 +30,13 @@ public class PlayAudioAPI implements PlayAudio{
 		}
 	}
 	
-	public void playAudio(Context context, byte[] audio, String type) {
+	public void playAudio(Context context, byte[] audio) {
+		if(m!=null)
+			m.stop();
+		m = new MediaPlayer();
 		try {
 	        // create temp file that will hold byte array
-	        File tempMp3 = File.createTempFile("audioFile", type, context.getCacheDir());
+	        File tempMp3 = File.createTempFile("audioFile", ".mp3", context.getCacheDir());
 	        tempMp3.deleteOnExit();
 	        FileOutputStream fos = new FileOutputStream(tempMp3);
 	        fos.write(audio);
@@ -53,6 +56,7 @@ public class PlayAudioAPI implements PlayAudio{
 	        m.prepare();
 	        m.setVolume(1f, 1f);
 	        m.start();
+	        fis.close();
 	    } catch (IOException ex) {
 	        ex.printStackTrace();
 	    }

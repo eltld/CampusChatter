@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -38,9 +39,11 @@ public class PlayVideoAPI implements PlayVideo{
 
 			videoView.start();
 		} catch (FileNotFoundException e) {
+			Log.e("play video", "file not found");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			Log.e("play video", "ioexception");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

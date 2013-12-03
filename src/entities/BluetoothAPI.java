@@ -1,5 +1,6 @@
 package entities;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.bluetooth.BluetoothAdapter;
@@ -52,13 +53,13 @@ public class BluetoothAPI implements Bluetooth{
 		context.startActivity(discoverableIntent);
 	}
 	
-	public void sendFile(String filename,Context context) {
+	public Intent sendFile(String filename,Context context) {
 		Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-		Uri screenshotUri = Uri.parse(filename);
+		File f = new File(filename);
 
-		sharingIntent.setType("image/*");
+		sharingIntent.setType("image/jpeg");
 		sharingIntent.setPackage("com.android.bluetooth");
-		sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-		context.startActivity(Intent.createChooser(sharingIntent, "Share image"));
+		sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
+		return sharingIntent;
 	}
 }
