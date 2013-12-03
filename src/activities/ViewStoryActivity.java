@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.campuschatter.R;
@@ -25,45 +26,62 @@ public class ViewStoryActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view_story);
+
+		
 		
 		String title = (String) getIntent().getExtras().get("title");
 		String author = (String) getIntent().getExtras().get("author");
-		String description = (String) getIntent().getExtras().get("description");
+		String description = (String) getIntent().getExtras()
+				.get("description");
 		final byte[] media = (byte[]) getIntent().getExtras().get("media");
 		int mediaType = (Integer) getIntent().getExtras().get("mediaType");
+		
+		
 
-		((TextView)findViewById(R.id.story_title_view)).setText(title);
-		((TextView)findViewById(R.id.story_author_view)).setText("by " + author);		
-		((TextView)findViewById(R.id.story_description_view)).setText(description);	
-		FrameLayout fl = (FrameLayout)findViewById(R.id.story_media_wrapper);
+		((TextView) findViewById(R.id.story_title_view)).setText(title);
+		((TextView) findViewById(R.id.story_author_view)).setText("by "
+				+ author);
+		((TextView) findViewById(R.id.story_description_view))
+				.setText(description);
+		FrameLayout fl = (FrameLayout) findViewById(R.id.story_media_wrapper);
+
 		
 		if (mediaType == Story.NO_MEDIA) {
 			return;
 		} else if (mediaType == Story.IMAGE_TYPE) {
-			ImageView iv = (ImageView)LayoutInflater.from(
-					getApplicationContext()).inflate(R.layout.image_story, null);
-			iv.setImageBitmap(BitmapFactory.decodeByteArray(media, 0, media.length));
+			ImageView iv = (ImageView) LayoutInflater.from(
+					getApplicationContext())
+					.inflate(R.layout.image_story, null);
+			iv.setImageBitmap(BitmapFactory.decodeByteArray(media, 0,
+					media.length));
 			fl.addView(iv);
 		} else if (mediaType == Story.VIDEO_TYPE) {
-			VideoView vv = (VideoView)LayoutInflater.from(
-					getApplicationContext()).inflate(R.layout.video_story, null);
-			
+			Toast.makeText(getApplicationContext(), "beginning\n", Toast.LENGTH_LONG).show();
+			VideoView vv = (VideoView) LayoutInflater.from(
+					getApplicationContext())
+					.inflate(R.layout.video_story, null);
+
+			Toast.makeText(getApplicationContext(), "middle\n", Toast.LENGTH_LONG).show();
+			// TODO: convert byte[] media into URI
 			PlayVideo pv = new PlayVideoAPI();
-			pv.playVideo(media, vv, this);
 			fl.addView(vv);
+			pv.playVideo(media, vv, this);
+			
 		} else if (mediaType == Story.AUDIO_TYPE) {
-			FrameLayout afl = (FrameLayout)LayoutInflater.from(
-					getApplicationContext()).inflate(R.layout.audio_story, null);
-			final ImageView ivPlay = (ImageView)afl.findViewById(R.id.play_audio);
+			FrameLayout afl = (FrameLayout) LayoutInflater.from(
+					getApplicationContext())
+					.inflate(R.layout.audio_story, null);
+			final ImageView ivPlay = (ImageView) afl
+					.findViewById(R.id.play_audio);
 			final PlayAudioAPI api = new PlayAudioAPI();
 			ivPlay.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					api.playAudio(getApplicationContext(), media);	
+					api.playAudio(getApplicationContext(), media);
 				}
 			});
 			fl.addView(afl);
-			
+
 		}
 
 	}

@@ -85,6 +85,7 @@ public class PostActivity extends Activity {
 		audioIcon.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				
 				captureAudio();
 			}
 		});
@@ -122,22 +123,26 @@ public class PostActivity extends Activity {
 		}
 		// Change UI to show uploading story
 		showProgress(true);
-		double lati = Double.parseDouble(latitudeField.getText().toString());
-		double longi = Double.parseDouble(longitudeField.getText().toString());	
-		double compassValue = Double.parseDouble(compassField.getText().toString());
+		if(latitudeField.getText()!=null &&!latitudeField.getText().equals("")){
+			double lati = Double.parseDouble(latitudeField.getText().toString());
+			double longi = Double.parseDouble(longitudeField.getText().toString());	
+			double compassValue = Double.parseDouble(compassField.getText().toString());
+			final ParseGeoPoint myPoint = geoPointFromLocation(lati, longi);
+			story.setLocation(myPoint);
+			story.setCompass(compassValue);
+		}
 
 		// Transfer inputs into story object
 		EditText vTitle = (EditText) findViewById(R.id.story_title);
 		EditText vDesc = (EditText) findViewById(R.id.story_description);
-		final ParseGeoPoint myPoint = geoPointFromLocation(lati, longi);
+		
 		
 		story.setAuthor(ParseUser.getCurrentUser());
 		story.setTitle(vTitle.getText().toString());
 		story.setDescription(vDesc.getText().toString());
 		story.setUpvotes(0);
 		story.setDownvotes(0);
-		story.setLocation(myPoint);
-		story.setCompass(compassValue);
+		
 
 		// If no media, just save it
 		if (mediaData == null) {
@@ -200,6 +205,8 @@ public class PostActivity extends Activity {
 		audioIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 7);
 		startActivityForResult(audioIntent, RECORD_AUDIO_REQUEST);
 	}
+	
+	
 	
 	private void captureGPS(){
 		GPSAPI gps = new GPSAPI();

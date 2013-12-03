@@ -274,13 +274,17 @@ public class FeedActivity extends Activity {
 
 	private void storyOnClickHandler(String title, String author,
 			String description, byte[] byteArr, int mediaType) {
+		
+		
 		Intent intent = new Intent(getApplicationContext(),
 				ViewStoryActivity.class);
 		intent.putExtra("title", title);
 		intent.putExtra("author", author);
 		intent.putExtra("description", description);
+		
 		intent.putExtra("media", byteArr);
 		intent.putExtra("mediaType", mediaType);
+		
 		startActivity(intent);
 	}
 

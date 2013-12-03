@@ -65,16 +65,8 @@ public class HomeActivity extends Activity {
 			return;
 		}
 		
-		// push notifications
-		Parse.initialize(this, "lKTMKGxVecR5pULQb24OyAJHF8LO5rCJSR514bE9", "xXHvncTYu9dGKt87KGavwa4787DsiUXMCWBy3vKk");
-		 // Specify a Activity to handle all pushes by default.
-        PushService.setDefaultPushCallback(this, HomeActivity.class);
-        
-        // Save the current installation.
-        ParseInstallation.getCurrentInstallation().saveInBackground();
-        
-        ParseAnalytics.trackAppOpened(getIntent());
-        PushService.subscribe(this, "Giants", HomeActivity.class);
+		
+       
 	}
 
 	@Override
