@@ -45,7 +45,6 @@ public class ViewStoryActivity extends Activity {
 			VideoView vv = (VideoView)LayoutInflater.from(
 					getApplicationContext()).inflate(R.layout.video_story, null);
 			
-			// TODO: convert byte[] media into URI
 			PlayVideo pv = new PlayVideoAPI();
 			pv.playVideo(media, vv, this);
 			fl.addView(vv);

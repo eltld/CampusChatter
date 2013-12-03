@@ -258,7 +258,8 @@ public class FeedActivity extends Activity {
 			String path = ActivitiesHelper.getRealPathFromURI(
 					getApplicationContext(), uri);
 			BluetoothAPI bluetooth = new BluetoothAPI();
-			bluetooth.sendFile(path, getApplicationContext());
+			Intent sharingIntent = bluetooth.sendFile(path, getApplicationContext());
+			startActivity(Intent.createChooser(sharingIntent, "Share image"));
 		}
 	}
 
