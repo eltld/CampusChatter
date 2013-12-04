@@ -56,12 +56,12 @@ public class ViewStoryActivity extends Activity {
 					media.length));
 			fl.addView(iv);
 		} else if (mediaType == Story.VIDEO_TYPE) {
-			Toast.makeText(getApplicationContext(), "beginning\n", Toast.LENGTH_LONG).show();
+			
 			VideoView vv = (VideoView) LayoutInflater.from(
 					getApplicationContext())
 					.inflate(R.layout.video_story, null);
 
-			Toast.makeText(getApplicationContext(), "middle\n", Toast.LENGTH_LONG).show();
+			
 			// TODO: convert byte[] media into URI
 			PlayVideo pv = new PlayVideoAPI();
 			fl.addView(vv);
