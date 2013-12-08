@@ -141,6 +141,7 @@ public class PostActivity extends Activity {
 	
 	private void postStory(){
 		showProgress(true);
+		setPostValue();
 		story.post(mediaData, title, description, myPoint, compassValue);
 		saveStoryAndReturnToFeed();
 	}
@@ -251,11 +252,9 @@ public class PostActivity extends Activity {
 			}
 			mediaData = stream.toByteArray();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			showToast("FileNotFound uploading video");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			showToast("IO Exception uploading video");
 		}
