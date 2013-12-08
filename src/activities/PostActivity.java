@@ -40,6 +40,10 @@ import entities.GPSAPI;
 public class PostActivity extends Activity {
 	private Story story;
 	private byte[] mediaData;
+	private ParseGeoPoint myPoint;
+	private double compassValue;
+	private String title;
+	private String description;
 
 	private final int IMAGE_QUALITY = 50;
 
@@ -117,61 +121,30 @@ public class PostActivity extends Activity {
 		}
 	}
 
-	private void postStory() {
-		if (mediaData == null) {
-			story.setMediaType(Story.NO_MEDIA);
-		}
-		// Change UI to show uploading story
-		showProgress(true);
+	private void setPostValue(){
+		
+		EditText vTitle = (EditText) findViewById(R.id.story_title);
+		this.title = vTitle.getText().toString();
+		
+		EditText vDesc = (EditText) findViewById(R.id.story_description);
+		this.description = vDesc.getText().toString();
+		
 		if(latitudeField.getText()!=null &&!latitudeField.getText().equals("")){
 			double lati = Double.parseDouble(latitudeField.getText().toString());
 			double longi = Double.parseDouble(longitudeField.getText().toString());	
-			double compassValue = Double.parseDouble(compassField.getText().toString());
-			final ParseGeoPoint myPoint = geoPointFromLocation(lati, longi);
-			story.setLocation(myPoint);
-			story.setCompass(compassValue);
+			this.compassValue = Double.parseDouble(compassField.getText().toString());
+			this.myPoint = geoPointFromLocation(lati, longi);
 		}
-
-		// Transfer inputs into story object
-		EditText vTitle = (EditText) findViewById(R.id.story_title);
-		EditText vDesc = (EditText) findViewById(R.id.story_description);
-		
-		
-		story.setAuthor(ParseUser.getCurrentUser());
-		story.setTitle(vTitle.getText().toString());
-		story.setDescription(vDesc.getText().toString());
-		story.setUpvotes(0);
-		story.setDownvotes(0);
-		
-
-		// If no media, just save it
-		if (mediaData == null) {
-			// just store text inputs
-			saveStoryAndReturnToFeed();
-			return;
-		}
-
-		// Deal with media files
-		String filename;
-		switch (story.getMediaType()) {
-		case Story.IMAGE_TYPE:
-			filename = "media.jpg";
-			break;
-		case Story.VIDEO_TYPE:
-			filename = "media.mp4";
-			break;
-		case Story.AUDIO_TYPE:
-			filename = "media.mp3";
-			break;
-		default:
-			filename = "";
-		}
-		ParseFile file = new ParseFile(filename, mediaData);
-		file.saveInBackground();
-		story.setMediaFile(file);
-		saveStoryAndReturnToFeed();
 	}
 
+
+	
+	private void postStory(){
+		showProgress(true);
+		story.post(mediaData, title, description, myPoint, compassValue);
+		saveStoryAndReturnToFeed();
+	}
+	
 	private void saveStoryAndReturnToFeed() {
 		story.saveInBackground(new SaveCallback() {
 			@Override

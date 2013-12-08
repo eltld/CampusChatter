@@ -7,7 +7,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 @ParseClassName("Story")
-public class Story extends ParseObject {
+public class Story extends ParseObject implements StoryInterface {
 	public final static int IMAGE_TYPE = 0;
 	public final static int AUDIO_TYPE = 1;
 	public final static int VIDEO_TYPE = 2;
@@ -79,12 +79,53 @@ public class Story extends ParseObject {
 	public void setLocation(ParseGeoPoint value) {
 		put("location", value);
 	}
-	
-	public double getCompass(){
+
+	public double getCompass() {
 		return getDouble("compass");
 	}
-	
-	public void setCompass(double compassValue){
+
+	public void setCompass(double compassValue) {
 		put("compass", compassValue);
 	}
+
+	public void post(byte[] mediaData, String title,
+			String desc, ParseGeoPoint myPoint, double compass) {
+		// Change UI to show uploading story
+
+		if (mediaData == null) {
+			setMediaType(Story.NO_MEDIA);
+		}
+		if (myPoint != null) {
+			setLocation(myPoint);
+			setCompass(compass);
+		}
+
+		setAuthor(ParseUser.getCurrentUser());
+		setTitle(title);
+		setDescription(desc);
+		setUpvotes(0);
+		setDownvotes(0);
+
+		if (mediaData != null) {
+			// Deal with media files
+			String filename;
+			switch (getMediaType()) {
+			case Story.IMAGE_TYPE:
+				filename = "media.jpg";
+				break;
+			case Story.VIDEO_TYPE:
+				filename = "media.mp4";
+				break;
+			case Story.AUDIO_TYPE:
+				filename = "media.mp3";
+				break;
+			default:
+				filename = "";
+			}
+			ParseFile file = new ParseFile(filename, mediaData);
+			file.saveInBackground();
+			setMediaFile(file);
+		}
+	}
+
 }
